@@ -1,0 +1,35 @@
+[2026-01-29T18:35:07.202Z] [INFO] Starting MCP installation...
+[2026-01-29T18:35:07.203Z] [INFO] Platform: win32
+[2026-01-29T18:35:07.203Z] [INFO] Selected MCPs: browser, context7, exa, desktop-commander
+[2026-01-29T18:35:07.204Z] [INFO] Installing Context7...
+[2026-01-29T18:35:07.204Z] [INFO] Installing Browser (Puppeteer)...
+[2026-01-29T18:35:07.204Z] [INFO] Installing Exa Web Search...
+[2026-01-29T18:35:07.204Z] [INFO] Installing Desktop Commander...
+[2026-01-29T18:35:07.205Z] [INFO] Validating package: @upstash/context7-mcp
+[2026-01-29T18:35:07.205Z] [INFO] Validating package: exa-mcp-server
+[2026-01-29T18:35:07.205Z] [INFO] Validating package: @wonderwhy-er/desktop-commander
+[2026-01-29T18:35:07.205Z] [INFO] Validating package: @modelcontextprotocol/server-puppeteer
+[2026-01-29T18:35:08.081Z] [INFO] Package exa-mcp-server validation skipped (Command failed: npx -y exa-mcp-server --version
+npm error could not determine executable to run
+npm error A complete log of this run can be found in: C:\Users\Pedro\AppData\Local\npm-cache\_logs\2026-01-29T18_35_07_444Z-debug-0.log
+) - will be installed on first use
+[2026-01-29T18:35:08.082Z] [SUCCESS] Exa Web Search installed successfully
+[2026-01-29T18:35:08.873Z] [INFO] Package @upstash/context7-mcp validation skipped (Command failed: npx -y @upstash/context7-mcp --version
+WARNING: Using default CLIENT_IP_ENCRYPTION_KEY.
+error: too many arguments. Expected 0 arguments but got 1.
+) - will be installed on first use
+[2026-01-29T18:35:08.874Z] [SUCCESS] Context7 installed successfully
+[2026-01-29T18:35:17.255Z] [INFO] Package @modelcontextprotocol/server-puppeteer validation skipped (Command failed: npx -y @modelcontextprotocol/server-puppeteer --version
+) - will be installed on first use
+[2026-01-29T18:35:17.258Z] [SUCCESS] Browser (Puppeteer) installed successfully
+[2026-01-29T18:35:17.259Z] [INFO] Package @wonderwhy-er/desktop-commander validation skipped (Command failed: npx -y @wonderwhy-er/desktop-commander --version
+npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+) - will be installed on first use
+[2026-01-29T18:35:17.261Z] [SUCCESS] Desktop Commander installed successfully
+[2026-01-29T18:35:17.261Z] [INFO] Health checks deferred to Story 1.8
+[2026-01-29T18:35:17.262Z] [INFO] MCP installation complete
+[2026-01-29T18:35:17.263Z] [INFO] Success: 4
+[2026-01-29T18:35:17.263Z] [INFO] Warnings: 0
+[2026-01-29T18:35:17.264Z] [INFO] Failed: 0
