@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     const webhook = validation.data
 
     // Check if webhook already processed (idempotency)
-    const { data: existingLog } = await getSupabaseAdmin()
+    const { data: existingLog } = await (getSupabaseAdmin() as any)
       .from('webhook_logs')
       .select('id')
       .eq('webhook_event_id', webhook.webhook_event_id)
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Save webhook log
-    await getSupabaseAdmin()
+    await (getSupabaseAdmin() as any)
       .from('webhook_logs')
       .insert([
         {
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Mark as processed
-    await getSupabaseAdmin()
+    await (getSupabaseAdmin() as any)
       .from('webhook_logs')
       .update({ processed: true })
       .eq('webhook_event_id', webhook.webhook_event_id)
@@ -119,7 +119,7 @@ async function processStatusUpdate(webhook: any): Promise<void> {
   const newStatus = statusMap[webhook.type] || 'failed'
 
   // Update lead
-  const { data: lead } = await getSupabaseAdmin()
+  const { data: lead } = await (getSupabaseAdmin() as any)
     .from('leads')
     .select('id, campaign_id')
     .eq('reference', reference)
@@ -127,7 +127,7 @@ async function processStatusUpdate(webhook: any): Promise<void> {
 
   if (!lead) return
 
-  await getSupabaseAdmin()
+  await (getSupabaseAdmin() as any)
     .from('leads')
     .update({
       status: newStatus,
@@ -145,7 +145,7 @@ async function processInvalidUpdate(webhook: any): Promise<void> {
   const { fullphone, reference } = webhook.data
 
   // Update lead as failed
-  const { data: lead } = await getSupabaseAdmin()
+  const { data: lead } = await (getSupabaseAdmin() as any)
     .from('leads')
     .select('id, campaign_id')
     .eq('reference', reference)
@@ -153,7 +153,7 @@ async function processInvalidUpdate(webhook: any): Promise<void> {
 
   if (!lead) return
 
-  await getSupabaseAdmin()
+  await (getSupabaseAdmin() as any)
     .from('leads')
     .update({
       status: 'failed',
@@ -171,7 +171,7 @@ async function processReplyUpdate(webhook: any): Promise<void> {
   const { sms_msg_id, reply } = webhook.data
 
   // Update lead with reply
-  const { data: lead } = await getSupabaseAdmin()
+  const { data: lead } = await (getSupabaseAdmin() as any)
     .from('leads')
     .select('id, campaign_id')
     .eq('reference', sms_msg_id)
@@ -179,7 +179,7 @@ async function processReplyUpdate(webhook: any): Promise<void> {
 
   if (!lead) return
 
-  await getSupabaseAdmin()
+  await (getSupabaseAdmin() as any)
     .from('leads')
     .update({
       status: 'replied',
@@ -198,7 +198,7 @@ async function processRejectedByHomologation(webhook: any): Promise<void> {
 
 async function updateCampaignStats(campaignId: string): Promise<void> {
   // Get all leads for this campaign
-  const { data: leads } = await getSupabaseAdmin()
+  const { data: leads } = await (getSupabaseAdmin() as any)
     .from('leads')
     .select('status')
     .eq('campaign_id', campaignId)
@@ -206,15 +206,15 @@ async function updateCampaignStats(campaignId: string): Promise<void> {
   if (!leads) return
 
   const stats = {
-    total_leads: leads.length,
-    delivered: leads.filter(l => l.status === 'delivered').length,
-    failed: leads.filter(l => l.status === 'failed').length,
-    pending: leads.filter(l => l.status === 'pending').length,
-    sent: leads.filter(l => l.status === 'sent').length,
+    total_leads: leads?.length || 0,
+    delivered: leads?.filter((l: any) => l.status === 'delivered').length || 0,
+    failed: leads?.filter((l: any) => l.status === 'failed').length || 0,
+    pending: leads?.filter((l: any) => l.status === 'pending').length || 0,
+    sent: leads?.filter((l: any) => l.status === 'sent').length || 0,
   }
 
   // Update campaign
-  await getSupabaseAdmin()
+  await (getSupabaseAdmin() as any)
     .from('campaigns')
     .update({
       delivered: stats.delivered,

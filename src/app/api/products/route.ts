@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create product
-    const { data: product, error } = await getSupabaseAdmin()
+    const { data: product, error } = await (getSupabaseAdmin() as any)
       .from('products')
       .insert([{ name }])
       .select('*')

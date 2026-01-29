@@ -46,16 +46,3 @@ export function getSupabase() {
 export function getSupabaseAdmin() {
   return initSupabaseAdmin()
 }
-
-// Lazy-loaded exports (for backward compatibility)
-export const supabase = new Proxy({} as any, {
-  get: (target, prop) => {
-    return initSupabase()[prop as keyof typeof initSupabase]
-  },
-})
-
-export const supabaseAdmin = new Proxy({} as any, {
-  get: (target, prop) => {
-    return initSupabaseAdmin()[prop as keyof typeof initSupabaseAdmin]
-  },
-})

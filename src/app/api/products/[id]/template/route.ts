@@ -74,7 +74,7 @@ export async function PUT(
 
     if (existing) {
       // Update existing template
-      const { data: updated, error } = await getSupabaseAdmin()
+      const { data: updated, error } = await (getSupabaseAdmin() as any)
         .from('message_templates')
         .update({
           message,
@@ -95,7 +95,7 @@ export async function PUT(
       return NextResponse.json({ template: updated }, { status: 200 })
     } else {
       // Create new template
-      const { data: created, error } = await getSupabaseAdmin()
+      const { data: created, error } = await (getSupabaseAdmin() as any)
         .from('message_templates')
         .insert([
           {

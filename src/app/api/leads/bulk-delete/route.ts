@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseAdmin } from '@/lib/supabase'
 import { BulkDeleteSchema } from '@/lib/schemas'
+import { Lead } from '@/types/lead'
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest) {
     const { data: leads, error: fetchError } = await getSupabaseAdmin()
       .from('leads')
       .select('id, campaign_id')
-      .in('id', leadIds)
+      .in('id', leadIds) as { data: Pick<Lead, 'id' | 'campaign_id'>[] | null, error: any }
 
     if (fetchError) {
       return NextResponse.json(
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
       const { data: remainingLeads } = await getSupabaseAdmin()
         .from('leads')
         .select('status')
-        .eq('campaign_id', campaignId)
+        .eq('campaign_id', campaignId) as { data: Pick<Lead, 'status'>[] | null }
 
       const stats = {
         total_leads: remainingLeads?.length || 0,
@@ -68,7 +69,7 @@ export async function POST(request: NextRequest) {
           .eq('id', campaignId)
       } else {
         // Update campaign stats
-        await getSupabaseAdmin()
+        await (getSupabaseAdmin() as any)
           .from('campaigns')
           .update({
             total_leads: stats.total_leads,

@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     const { campaignName, productName, leads } = validation.data
 
     // Get or create product
-    let { data: product, error: productError } = await getSupabaseAdmin()
+    let { data: product, error: productError } = await (getSupabaseAdmin() as any)
       .from('products')
       .select('id, name')
       .eq('name', productName)
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 
     if (productError && productError.code === 'PGRST116') {
       // Product doesn't exist, create it
-      const { data: newProduct, error: createError } = await getSupabaseAdmin()
+      const { data: newProduct, error: createError } = await (getSupabaseAdmin() as any)
         .from('products')
         .insert([{ name: productName }])
         .select('id, name')
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get product template
-    const { data: template, error: templateError } = await getSupabaseAdmin()
+    const { data: template, error: templateError } = await (getSupabaseAdmin() as any)
       .from('message_templates')
       .select('message, variables')
       .eq('product_id', product.id)
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create campaign
-    const { data: campaign, error: campaignError } = await getSupabaseAdmin()
+    const { data: campaign, error: campaignError } = await (getSupabaseAdmin() as any)
       .from('campaigns')
       .insert([
         {
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Insert leads
-    const { error: leadsError } = await getSupabaseAdmin()
+    const { error: leadsError } = await (getSupabaseAdmin() as any)
       .from('leads')
       .insert(leadsToInsert)
 
@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
 async function sendCampaignSMS(campaignId: string): Promise<void> {
   try {
     // Get all pending leads
-    const { data: leads, error: leadsError } = await getSupabaseAdmin()
+    const { data: leads, error: leadsError } = await (getSupabaseAdmin() as any)
       .from('leads')
       .select('id, fullphone, message')
       .eq('campaign_id', campaignId)
@@ -165,7 +165,7 @@ async function sendCampaignSMS(campaignId: string): Promise<void> {
 
     // Send SMS to each lead
     const results = await sendBulkSMS(
-      leads.map(lead => ({
+      (leads || []).map((lead: any) => ({
         to: lead.fullphone,
         message: lead.message
       }))
@@ -176,7 +176,7 @@ async function sendCampaignSMS(campaignId: string): Promise<void> {
       const result = results[i]
       const lead = leads[i]
 
-      await getSupabaseAdmin()
+      await (getSupabaseAdmin() as any)
         .from('leads')
         .update({
           status: result.success ? 'sent' : 'failed',
@@ -188,7 +188,7 @@ async function sendCampaignSMS(campaignId: string): Promise<void> {
 
     // Update campaign stats
     const successCount = results.filter(r => r.success).length
-    await getSupabaseAdmin()
+    await (getSupabaseAdmin() as any)
       .from('campaigns')
       .update({
         sent: successCount,
