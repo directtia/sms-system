@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase'
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const productId = searchParams.get('productId')
 
-    let query = supabaseAdmin
+    let query = getSupabaseAdmin()
       .from('campaigns')
       .select('*, products(name)')
       .order('created_at', { ascending: false })

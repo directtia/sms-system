@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase'
 import { N8NWebhookSchema } from '@/lib/schemas'
 import { sendBulkSMS } from '@/lib/dizparos'
 import { normalizeBrazilianPhone } from '@/lib/utils'
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     const { campaignName, productName, leads } = validation.data
 
     // Get or create product
-    let { data: product, error: productError } = await supabaseAdmin
+    let { data: product, error: productError } = await getSupabaseAdmin()
       .from('products')
       .select('id, name')
       .eq('name', productName)
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 
     if (productError && productError.code === 'PGRST116') {
       // Product doesn't exist, create it
-      const { data: newProduct, error: createError } = await supabaseAdmin
+      const { data: newProduct, error: createError } = await getSupabaseAdmin()
         .from('products')
         .insert([{ name: productName }])
         .select('id, name')
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get product template
-    const { data: template, error: templateError } = await supabaseAdmin
+    const { data: template, error: templateError } = await getSupabaseAdmin()
       .from('message_templates')
       .select('message, variables')
       .eq('product_id', product.id)
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create campaign
-    const { data: campaign, error: campaignError } = await supabaseAdmin
+    const { data: campaign, error: campaignError } = await getSupabaseAdmin()
       .from('campaigns')
       .insert([
         {
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Insert leads
-    const { error: leadsError } = await supabaseAdmin
+    const { error: leadsError } = await getSupabaseAdmin()
       .from('leads')
       .insert(leadsToInsert)
 
@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
 async function sendCampaignSMS(campaignId: string): Promise<void> {
   try {
     // Get all pending leads
-    const { data: leads, error: leadsError } = await supabaseAdmin
+    const { data: leads, error: leadsError } = await getSupabaseAdmin()
       .from('leads')
       .select('id, fullphone, message')
       .eq('campaign_id', campaignId)
@@ -176,7 +176,7 @@ async function sendCampaignSMS(campaignId: string): Promise<void> {
       const result = results[i]
       const lead = leads[i]
 
-      await supabaseAdmin
+      await getSupabaseAdmin()
         .from('leads')
         .update({
           status: result.success ? 'sent' : 'failed',
@@ -188,7 +188,7 @@ async function sendCampaignSMS(campaignId: string): Promise<void> {
 
     // Update campaign stats
     const successCount = results.filter(r => r.success).length
-    await supabaseAdmin
+    await getSupabaseAdmin()
       .from('campaigns')
       .update({
         sent: successCount,

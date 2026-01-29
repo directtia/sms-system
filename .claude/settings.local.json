@@ -9,7 +9,20 @@
       "Bash(git init:*)",
       "Bash(git config:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(npm install:*)",
+      "Bash(vercel deploy:*)",
+      "Bash(vercel ls:*)",
+      "Bash(vercel logs:*)",
+      "Bash(vercel env pull:*)",
+      "Bash(vercel env add:*)",
+      "Bash(vercel env add DIZPAROS_API_TOKEN production --token akYRaBVW2vWJFqBD1UPIEMj0)",
+      "Bash(vercel build:*)",
+      "Bash(vercel pull:*)",
+      "Bash(find:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase'
 import { CreateProductSchema } from '@/lib/schemas'
 
 export async function GET(request: NextRequest) {
   try {
-    const { data: products, error } = await supabaseAdmin
+    const { data: products, error } = await getSupabaseAdmin()
       .from('products')
       .select('*, message_templates(id, message, variables)')
       .order('created_at', { ascending: false })
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     const { name } = validation.data
 
     // Check if product already exists
-    const { data: existing } = await supabaseAdmin
+    const { data: existing } = await getSupabaseAdmin()
       .from('products')
       .select('id')
       .eq('name', name)
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create product
-    const { data: product, error } = await supabaseAdmin
+    const { data: product, error } = await getSupabaseAdmin()
       .from('products')
       .insert([{ name }])
       .select('*')

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase'
 import { UpdateTemplateSchema } from '@/lib/schemas'
 import { extractVariables } from '@/lib/interpolate'
 
@@ -12,7 +12,7 @@ export async function GET(
   { params }: { params: Params }
 ) {
   try {
-    const { data: template, error } = await supabaseAdmin
+    const { data: template, error } = await getSupabaseAdmin()
       .from('message_templates')
       .select('*')
       .eq('product_id', params.id)
@@ -66,7 +66,7 @@ export async function PUT(
     }
 
     // Check if template exists
-    const { data: existing } = await supabaseAdmin
+    const { data: existing } = await getSupabaseAdmin()
       .from('message_templates')
       .select('id')
       .eq('product_id', params.id)
@@ -74,7 +74,7 @@ export async function PUT(
 
     if (existing) {
       // Update existing template
-      const { data: updated, error } = await supabaseAdmin
+      const { data: updated, error } = await getSupabaseAdmin()
         .from('message_templates')
         .update({
           message,
@@ -95,7 +95,7 @@ export async function PUT(
       return NextResponse.json({ template: updated }, { status: 200 })
     } else {
       // Create new template
-      const { data: created, error } = await supabaseAdmin
+      const { data: created, error } = await getSupabaseAdmin()
         .from('message_templates')
         .insert([
           {

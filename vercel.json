@@ -1,0 +1,13 @@
+{
+  "env": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://puvotlvpjthhgxjclpxd.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase_anon_key",
+    "SUPABASE_SERVICE_ROLE_KEY": "@supabase_service_role_key",
+    "DIZPAROS_API_TOKEN": "@dizparos_api_token",
+    "DIZPAROS_API_URL": "https://api.dizparos.com/v1",
+    "NEXT_PUBLIC_APP_URL": "@app_url"
+  },
+  "buildCommand": "next build",
+  "installCommand": "npm install",
+  "outputDirectory": ".next"
+}

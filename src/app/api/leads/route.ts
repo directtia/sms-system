@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase'
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const { data: leads, error } = await supabaseAdmin
+    const { data: leads, error } = await getSupabaseAdmin()
       .from('leads')
       .select('*')
       .eq('campaign_id', campaignId)

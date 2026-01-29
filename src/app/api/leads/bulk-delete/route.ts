@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase'
 import { BulkDeleteSchema } from '@/lib/schemas'
 
 export async function POST(request: NextRequest) {
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     const { leadIds } = validation.data
 
     // Get campaign IDs for the leads
-    const { data: leads, error: fetchError } = await supabaseAdmin
+    const { data: leads, error: fetchError } = await getSupabaseAdmin()
       .from('leads')
       .select('id, campaign_id')
       .in('id', leadIds)
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     const campaignIds = [...new Set(leads?.map(l => l.campaign_id) || [])]
 
     // Delete leads
-    const { error: deleteError } = await supabaseAdmin
+    const { error: deleteError } = await getSupabaseAdmin()
       .from('leads')
       .delete()
       .in('id', leadIds)
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
 
     // Update campaign stats for each affected campaign
     for (const campaignId of campaignIds) {
-      const { data: remainingLeads } = await supabaseAdmin
+      const { data: remainingLeads } = await getSupabaseAdmin()
         .from('leads')
         .select('status')
         .eq('campaign_id', campaignId)
@@ -62,13 +62,13 @@ export async function POST(request: NextRequest) {
 
       // If no leads left, delete campaign
       if (stats.total_leads === 0) {
-        await supabaseAdmin
+        await getSupabaseAdmin()
           .from('campaigns')
           .delete()
           .eq('id', campaignId)
       } else {
         // Update campaign stats
-        await supabaseAdmin
+        await getSupabaseAdmin()
           .from('campaigns')
           .update({
             total_leads: stats.total_leads,

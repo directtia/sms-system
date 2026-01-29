@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase'
 
 interface Params {
   id: string
@@ -10,7 +10,7 @@ export async function GET(
   { params }: { params: Params }
 ) {
   try {
-    const { data: campaign, error } = await supabaseAdmin
+    const { data: campaign, error } = await getSupabaseAdmin()
       .from('campaigns')
       .select('*, products(name)')
       .eq('id', params.id)
@@ -46,13 +46,13 @@ export async function DELETE(
 ) {
   try {
     // Delete all leads first (cascade should handle this, but be explicit)
-    await supabaseAdmin
+    await getSupabaseAdmin()
       .from('leads')
       .delete()
       .eq('campaign_id', params.id)
 
     // Delete campaign
-    const { error } = await supabaseAdmin
+    const { error } = await getSupabaseAdmin()
       .from('campaigns')
       .delete()
       .eq('id', params.id)
