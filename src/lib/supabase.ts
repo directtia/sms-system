@@ -1,18 +1,61 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+// Lazy-load clients only when needed (avoids validation during build)
+let supabaseClient: ReturnType<typeof createClient> | null = null
+let supabaseAdminClient: ReturnType<typeof createClient> | null = null
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables')
+function initSupabase() {
+  if (supabaseClient) return supabaseClient
+
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!url || !key) {
+    throw new Error(`Missing Supabase config: URL=${url ? 'set' : 'missing'}, Key=${key ? 'set' : 'missing'}`)
+  }
+
+  supabaseClient = createClient(url, key)
+  return supabaseClient
 }
 
-// Client for browser and server-side (with anon key)
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+function initSupabaseAdmin() {
+  if (supabaseAdminClient) return supabaseAdminClient
 
-// Client for server-side operations (with service role key)
-export const supabaseAdmin = createClient(
-  supabaseUrl,
-  supabaseServiceRoleKey || supabaseAnonKey
-)
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!url) {
+    throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL')
+  }
+
+  const key = serviceKey || anonKey
+  if (!key) {
+    throw new Error('Missing Supabase API key (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY)')
+  }
+
+  supabaseAdminClient = createClient(url, key)
+  return supabaseAdminClient
+}
+
+// Export getter functions
+export function getSupabase() {
+  return initSupabase()
+}
+
+export function getSupabaseAdmin() {
+  return initSupabaseAdmin()
+}
+
+// Lazy-loaded exports (for backward compatibility)
+export const supabase = new Proxy({} as any, {
+  get: (target, prop) => {
+    return initSupabase()[prop as keyof typeof initSupabase]
+  },
+})
+
+export const supabaseAdmin = new Proxy({} as any, {
+  get: (target, prop) => {
+    return initSupabaseAdmin()[prop as keyof typeof initSupabaseAdmin]
+  },
+})
