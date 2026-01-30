@@ -3,7 +3,7 @@ import { getSupabaseAdmin } from '@/lib/supabase'
 
 export async function GET(request: NextRequest) {
   try {
-    const { data: templates, error } = await getSupabaseAdmin()
+    const { data: templates, error } = await (getSupabaseAdmin() as any)
       .from('templates')
       .select('*')
       .order('created_at', { ascending: false })
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { data: template, error } = await getSupabaseAdmin()
+    const { data: template, error } = await (getSupabaseAdmin() as any)
       .from('templates')
       .insert([{ name: name.trim(), message: message.trim() }])
       .select('*')

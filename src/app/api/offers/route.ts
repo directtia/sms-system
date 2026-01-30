@@ -3,7 +3,7 @@ import { getSupabaseAdmin } from '@/lib/supabase'
 
 export async function GET(request: NextRequest) {
   try {
-    const { data: offers, error } = await getSupabaseAdmin()
+    const { data: offers, error } = await (getSupabaseAdmin() as any)
       .from('offers')
       .select('*')
       .order('created_at', { ascending: false })
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { data: offer, error } = await getSupabaseAdmin()
+    const { data: offer, error } = await (getSupabaseAdmin() as any)
       .from('offers')
       .insert([{ name: name.trim() }])
       .select('*')

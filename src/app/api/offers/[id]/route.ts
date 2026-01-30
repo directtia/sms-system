@@ -50,7 +50,7 @@ export async function DELETE(
   { params }: { params: Params }
 ) {
   try {
-    const { error } = await getSupabaseAdmin()
+    const { error } = await (getSupabaseAdmin() as any)
       .from('offers')
       .delete()
       .eq('id', params.id)

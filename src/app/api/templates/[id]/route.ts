@@ -57,7 +57,7 @@ export async function DELETE(
   { params }: { params: Params }
 ) {
   try {
-    const { error } = await getSupabaseAdmin()
+    const { error } = await (getSupabaseAdmin() as any)
       .from('templates')
       .delete()
       .eq('id', params.id)
