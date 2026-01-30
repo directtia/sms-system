@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { campaignName, productName, productId, leads } = body
+    const { campaignName, productId, offerId, templateId, leads } = body
 
     if (!campaignName) {
       return NextResponse.json(
@@ -46,28 +46,65 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    let product: any = null
-
-    // Try to get product by ID first, then by name
-    if (productId) {
-      const { data, error } = await (getSupabaseAdmin() as any)
-        .from('products')
-        .select('id')
-        .eq('id', productId)
-        .single()
-      if (!error && data) product = data
-    } else if (productName) {
-      const { data, error } = await (getSupabaseAdmin() as any)
-        .from('products')
-        .select('id')
-        .eq('name', productName)
-        .single()
-      if (!error && data) product = data
+    if (!productId) {
+      return NextResponse.json(
+        { error: 'Missing required field: productId' },
+        { status: 400 }
+      )
     }
 
-    if (!product) {
+    if (!offerId) {
       return NextResponse.json(
-        { error: 'Product not found. Please provide productId or valid productName' },
+        { error: 'Missing required field: offerId' },
+        { status: 400 }
+      )
+    }
+
+    if (!templateId) {
+      return NextResponse.json(
+        { error: 'Missing required field: templateId' },
+        { status: 400 }
+      )
+    }
+
+    // Verify product exists
+    const { data: product, error: productError } = await (getSupabaseAdmin() as any)
+      .from('products')
+      .select('id')
+      .eq('id', productId)
+      .single()
+
+    if (productError || !product) {
+      return NextResponse.json(
+        { error: 'Product not found' },
+        { status: 404 }
+      )
+    }
+
+    // Verify offer exists
+    const { data: offer, error: offerError } = await (getSupabaseAdmin() as any)
+      .from('offers')
+      .select('id')
+      .eq('id', offerId)
+      .single()
+
+    if (offerError || !offer) {
+      return NextResponse.json(
+        { error: 'Offer not found' },
+        { status: 404 }
+      )
+    }
+
+    // Verify template exists
+    const { data: template, error: templateError } = await (getSupabaseAdmin() as any)
+      .from('templates')
+      .select('id')
+      .eq('id', templateId)
+      .single()
+
+    if (templateError || !template) {
+      return NextResponse.json(
+        { error: 'Template not found' },
         { status: 404 }
       )
     }
@@ -78,7 +115,9 @@ export async function POST(request: NextRequest) {
       .insert([
         {
           name: campaignName,
-          product_id: product.id,
+          product_id: productId,
+          offer_id: offerId,
+          template_id: templateId,
           status: 'pending'
         }
       ])
@@ -99,7 +138,7 @@ export async function POST(request: NextRequest) {
         campaign_id: campaign.id,
         phone: lead.phone,
         customer_name: lead.customer_name,
-        discount_code: lead.discount_code
+        message: lead.message || ''
       }))
 
       const { error: leadsError } = await getSupabaseAdmin()

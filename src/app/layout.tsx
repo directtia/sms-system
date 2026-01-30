@@ -23,6 +23,8 @@ export default function RootLayout({
             <div className="space-x-4">
               <a href="/" className="hover:opacity-80">Campanhas</a>
               <a href="/products" className="hover:opacity-80">Produtos</a>
+              <a href="/offers" className="hover:opacity-80">Ofertas</a>
+              <a href="/templates" className="hover:opacity-80">Templates</a>
             </div>
           </div>
         </nav>

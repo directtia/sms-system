@@ -19,24 +19,7 @@ export default function ProductsPage() {
       const res = await fetch('/api/products')
       if (!res.ok) throw new Error('Failed to fetch products')
       const data = await res.json()
-
-      // Fetch templates for each product
-      const productsWithTemplates = await Promise.all(
-        (data.products || []).map(async (product: any) => {
-          try {
-            const templateRes = await fetch(`/api/products/${product.id}/template`)
-            if (templateRes.ok) {
-              const templateData = await templateRes.json()
-              return { ...product, template: templateData.template }
-            }
-          } catch (e) {
-            // Template not found, which is okay
-          }
-          return product
-        })
-      )
-
-      setProducts(productsWithTemplates)
+      setProducts(data.products || [])
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error')
     } finally {
@@ -109,47 +92,19 @@ export default function ProductsPage() {
         </div>
       ) : (
         <div className="grid gap-4">
-          {products.map((product) => {
-            const template = product.template
-
-            return (
-              <div key={product.id} className="bg-white p-6 rounded-lg shadow">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <h3 className="text-xl font-bold">{product.name}</h3>
-                    {template ? (
-                      <div className="mt-3 space-y-2">
-                        <div>
-                          <p className="text-sm text-gray-600">Template de Mensagem:</p>
-                          <p className="mt-1 p-3 bg-gray-100 rounded text-sm">
-                            {template.message}
-                          </p>
-                        </div>
-                        {template.variables && template.variables.length > 0 && (
-                          <div>
-                            <p className="text-sm text-gray-600">Variáveis:</p>
-                            <p className="mt-1 text-sm">
-                              {template.variables.join(', ')}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-red-600 mt-2">
-                        ⚠️ Nenhum template configurado
-                      </p>
-                    )}
-                  </div>
-                  <a
-                    href={`/products/${product.id}`}
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 whitespace-nowrap ml-4"
-                  >
-                    Editar
-                  </a>
-                </div>
+          {products.map((product) => (
+            <div key={product.id} className="bg-white p-6 rounded-lg shadow">
+              <div className="flex justify-between items-center">
+                <h3 className="text-xl font-bold">{product.name}</h3>
+                <a
+                  href={`/products/${product.id}`}
+                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                >
+                  Editar
+                </a>
               </div>
-            )
-          })}
+            </div>
+          ))}
         </div>
       )}
     </div>
