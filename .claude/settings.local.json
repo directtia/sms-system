@@ -22,7 +22,18 @@
       "Bash(vercel env add DIZPAROS_API_TOKEN production --token akYRaBVW2vWJFqBD1UPIEMj0)",
       "Bash(vercel build:*)",
       "Bash(vercel pull:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "mcp__browser__puppeteer_navigate",
+      "mcp__browser__puppeteer_screenshot",
+      "mcp__browser__puppeteer_click",
+      "mcp__browser__puppeteer_evaluate",
+      "WebFetch(domain:api.hostinger.com)",
+      "WebSearch",
+      "WebFetch(domain:developers.hostinger.com)",
+      "Bash(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@31.97.26.161 \"echo ''SSH Connection successful!'' && uname -a\")",
+      "Bash(apt-get update:*)",
+      "Bash(apt-get install:*)",
+      "Bash(ssh -i ~/.ssh/id_ed25519 root@31.97.26.161 \"pm2 status | grep sms-app\")"
     ]
   },
   "enableAllProjectMcpServers": true,
