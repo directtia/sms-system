@@ -33,7 +33,16 @@
       "Bash(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@31.97.26.161 \"echo ''SSH Connection successful!'' && uname -a\")",
       "Bash(apt-get update:*)",
       "Bash(apt-get install:*)",
-      "Bash(ssh -i ~/.ssh/id_ed25519 root@31.97.26.161 \"pm2 status | grep sms-app\")"
+      "Bash(ssh -i ~/.ssh/id_ed25519 root@31.97.26.161 \"pm2 status | grep sms-app\")",
+      "Bash(ssh root@31.97.26.161 \"cd /var/www/sms && git pull && npm run build && pm2 restart sms-app && pm2 logs sms-app --lines 20\")",
+      "Bash(ssh root@31.97.26.161 \"ssh-keygen -t ed25519 -f /root/.ssh/github_key -N '''' && cat /root/.ssh/github_key.pub\")",
+      "Bash(ssh root@31.97.26.161 \"cat /root/.ssh/github_key.pub\")",
+      "Bash(ssh root@31.97.26.161 \"ssh-keyscan github.com >> /root/.ssh/known_hosts 2>/dev/null && ssh-agent bash -c ''ssh-add /root/.ssh/github_key && cd /var/www/sms && git pull'' 2>&1 | head -50\")",
+      "Bash(ssh root@31.97.26.161 \"cd /var/www/sms && npm run build 2>&1 | tail -50\")",
+      "Bash(ssh root@31.97.26.161 \"pm2 restart sms-app && sleep 3 && pm2 logs sms-app --lines 30 --nostream\")",
+      "Bash(ssh root@31.97.26.161 \"curl -s http://localhost:3001/api/campaigns | head -100\")",
+      "Bash(ssh root@31.97.26.161 \"curl -s -H ''apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1dm90bHZwanRoaGd4amNscHhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI1ODAwNjIsImV4cCI6MjA1ODE1NjA2Mn0.lAYqDmcOTNSOXzQK7z86r9LDjbGHGMgTdRw6RFQWe_g'' ''https://puvotlvpjthhgxjclpxd.supabase.co/rest/v1/campaigns?select=*'' 2>/dev/null | head -50\")",
+      "Bash(ssh:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
