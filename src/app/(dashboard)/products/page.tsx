@@ -51,6 +51,21 @@ export default function ProductsPage() {
     }
   }
 
+  const handleDeleteProduct = async (id: string) => {
+    if (!confirm('Delete this product?')) return
+
+    try {
+      const res = await fetch(`/api/products/${id}`, {
+        method: 'DELETE'
+      })
+
+      if (!res.ok) throw new Error('Failed to delete product')
+      setProducts(products.filter(p => p.id !== id))
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Error deleting product')
+    }
+  }
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Produtos & Templates</h1>
@@ -96,12 +111,20 @@ export default function ProductsPage() {
             <div key={product.id} className="bg-white p-6 rounded-lg shadow">
               <div className="flex justify-between items-center">
                 <h3 className="text-xl font-bold">{product.name}</h3>
-                <a
-                  href={`/products/${product.id}`}
-                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                >
-                  Editar
-                </a>
+                <div className="flex gap-2">
+                  <a
+                    href={`/products/${product.id}`}
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                  >
+                    Editar
+                  </a>
+                  <button
+                    onClick={() => handleDeleteProduct(product.id)}
+                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                  >
+                    Deletar
+                  </button>
+                </div>
               </div>
             </div>
           ))}
