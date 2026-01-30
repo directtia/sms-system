@@ -16,8 +16,8 @@ html {
 }
 
 body {
-  background: #f9fafb;
-  color: #1f2937;
+  background: #0F172A;
+  color: #E2E8F0;
   line-height: 1.6;
 }
 
@@ -33,14 +33,15 @@ table {
 th, td {
   padding: 0.75rem 1rem;
   text-align: left;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #334155;
 }
 
 th {
-  background: #f3f4f6;
+  background: #1E293B;
   font-weight: 600;
+  color: #FFFFFF;
 }
 
 tr:hover {
-  background: #f9fafb;
+  background: #334155;
 }

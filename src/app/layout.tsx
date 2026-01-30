@@ -16,15 +16,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body>
-        <nav className="bg-blue-600 text-white p-4 shadow">
+      <body style={{ background: '#0F172A', color: '#E2E8F0' }}>
+        <nav className="bg-slate-900 text-white p-4 shadow-lg border-b border-slate-700">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
             <h1 className="text-2xl font-bold">📱 SMS Dispatcher</h1>
-            <div className="space-x-4">
-              <a href="/" className="hover:opacity-80">Campanhas</a>
-              <a href="/products" className="hover:opacity-80">Produtos</a>
-              <a href="/offers" className="hover:opacity-80">Ofertas</a>
-              <a href="/templates" className="hover:opacity-80">Templates</a>
+            <div className="space-x-6 flex">
+              <a href="/" className="hover:text-teal-400 transition-colors">Campanhas</a>
+              <a href="/products" className="hover:text-teal-400 transition-colors">Produtos</a>
+              <a href="/offers" className="hover:text-teal-400 transition-colors">Ofertas</a>
+              <a href="/templates" className="hover:text-teal-400 transition-colors">Templates</a>
             </div>
           </div>
         </nav>
