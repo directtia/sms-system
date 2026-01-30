@@ -13,7 +13,20 @@ interface LeadInput {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const leads = Array.isArray(body) ? body : []
+
+    // Aceita múltiplos formatos:
+    // 1. Array direto: [{body: {...}}, ...]
+    // 2. Objeto com leads: {leads: [{body: {...}}, ...]}
+    // 3. Objeto com data: {data: [{body: {...}}, ...]}
+    let leads = []
+
+    if (Array.isArray(body)) {
+      leads = body
+    } else if (body.leads && Array.isArray(body.leads)) {
+      leads = body.leads
+    } else if (body.data && Array.isArray(body.data)) {
+      leads = body.data
+    }
 
     // Validação
     if (!leads || leads.length === 0) {
