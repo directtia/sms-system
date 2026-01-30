@@ -82,18 +82,18 @@ export default function CampaignsPage() {
           Nenhuma campanha criada ainda
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow overflow-x-auto">
+        <div className="bg-slate-800 rounded-lg shadow overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-100 border-b">
+            <thead className="bg-slate-700 border-b border-slate-600">
               <tr>
-                <th className="text-left px-6 py-3">Nome</th>
-                <th className="text-left px-6 py-3">Produto</th>
-                <th className="text-center px-6 py-3">Total Leads</th>
-                <th className="text-center px-6 py-3">Entregues</th>
-                <th className="text-center px-6 py-3">Falhas</th>
-                <th className="text-center px-6 py-3">Taxa %</th>
-                <th className="text-left px-6 py-3">Data</th>
-                <th className="text-center px-6 py-3">Ações</th>
+                <th className="text-left px-6 py-3 text-white font-semibold">Nome</th>
+                <th className="text-left px-6 py-3 text-white font-semibold">Produto</th>
+                <th className="text-center px-6 py-3 text-white font-semibold">Total Leads</th>
+                <th className="text-center px-6 py-3 text-white font-semibold">Entregues</th>
+                <th className="text-center px-6 py-3 text-white font-semibold">Falhas</th>
+                <th className="text-center px-6 py-3 text-white font-semibold">Taxa %</th>
+                <th className="text-left px-6 py-3 text-white font-semibold">Data</th>
+                <th className="text-center px-6 py-3 text-white font-semibold">Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -103,18 +103,18 @@ export default function CampaignsPage() {
                   : 0
 
                 return (
-                  <tr key={campaign.id} className="border-b hover:bg-gray-50">
-                    <td className="px-6 py-3 font-medium">{campaign.name}</td>
-                    <td className="px-6 py-3">{campaign.product_name || 'N/A'}</td>
-                    <td className="px-6 py-3 text-center">{campaign.total_leads}</td>
-                    <td className="px-6 py-3 text-center text-green-600">
+                  <tr key={campaign.id} className="border-b border-slate-700 hover:bg-slate-700 transition-colors">
+                    <td className="px-6 py-3 font-semibold text-white">{campaign.name}</td>
+                    <td className="px-6 py-3 text-slate-200">{campaign.product_name || 'N/A'}</td>
+                    <td className="px-6 py-3 text-center text-slate-200">{campaign.total_leads}</td>
+                    <td className="px-6 py-3 text-center text-emerald-400 font-semibold">
                       {campaign.delivered}
                     </td>
-                    <td className="px-6 py-3 text-center text-red-600">
+                    <td className="px-6 py-3 text-center text-red-400 font-semibold">
                       {campaign.failed}
                     </td>
-                    <td className="px-6 py-3 text-center font-bold">{rate}%</td>
-                    <td className="px-6 py-3 text-sm">
+                    <td className="px-6 py-3 text-center font-bold text-teal-400">{rate}%</td>
+                    <td className="px-6 py-3 text-sm text-slate-300">
                       {new Date(campaign.created_at).toLocaleDateString('pt-BR', {
                         year: 'numeric',
                         month: '2-digit',
@@ -123,16 +123,16 @@ export default function CampaignsPage() {
                         minute: '2-digit'
                       })}
                     </td>
-                    <td className="px-6 py-3 text-center space-x-2">
+                    <td className="px-6 py-3 text-center space-x-3">
                       <a
                         href={`/campaigns/${campaign.id}`}
-                        className="text-blue-600 hover:underline"
+                        className="text-teal-400 hover:text-teal-300 font-medium transition-colors"
                       >
                         Ver
                       </a>
                       <button
                         onClick={() => handleDelete(campaign.id)}
-                        className="text-red-600 hover:underline"
+                        className="text-red-400 hover:text-red-300 font-medium transition-colors"
                       >
                         Deletar
                       </button>
