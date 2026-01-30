@@ -42,7 +42,8 @@
       "Bash(ssh root@31.97.26.161 \"pm2 restart sms-app && sleep 3 && pm2 logs sms-app --lines 30 --nostream\")",
       "Bash(ssh root@31.97.26.161 \"curl -s http://localhost:3001/api/campaigns | head -100\")",
       "Bash(ssh root@31.97.26.161 \"curl -s -H ''apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1dm90bHZwanRoaGd4amNscHhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI1ODAwNjIsImV4cCI6MjA1ODE1NjA2Mn0.lAYqDmcOTNSOXzQK7z86r9LDjbGHGMgTdRw6RFQWe_g'' ''https://puvotlvpjthhgxjclpxd.supabase.co/rest/v1/campaigns?select=*'' 2>/dev/null | head -50\")",
-      "Bash(ssh:*)"
+      "Bash(ssh:*)",
+      "Bash(scp:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

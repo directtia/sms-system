@@ -37,25 +37,37 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { campaignName, productName, leads } = body
+    const { campaignName, productName, productId, leads } = body
 
-    if (!campaignName || !productName || !leads) {
+    if (!campaignName) {
       return NextResponse.json(
-        { error: 'Missing required fields: campaignName, productName, leads' },
+        { error: 'Missing required field: campaignName' },
         { status: 400 }
       )
     }
 
-    // Get product by name
-    const { data: product, error: productError } = await (getSupabaseAdmin() as any)
-      .from('products')
-      .select('id')
-      .eq('name', productName)
-      .single()
+    let product: any = null
 
-    if (productError || !product) {
+    // Try to get product by ID first, then by name
+    if (productId) {
+      const { data, error } = await (getSupabaseAdmin() as any)
+        .from('products')
+        .select('id')
+        .eq('id', productId)
+        .single()
+      if (!error && data) product = data
+    } else if (productName) {
+      const { data, error } = await (getSupabaseAdmin() as any)
+        .from('products')
+        .select('id')
+        .eq('name', productName)
+        .single()
+      if (!error && data) product = data
+    }
+
+    if (!product) {
       return NextResponse.json(
-        { error: 'Product not found' },
+        { error: 'Product not found. Please provide productId or valid productName' },
         { status: 404 }
       )
     }
@@ -76,7 +88,7 @@ export async function POST(request: NextRequest) {
     if (campaignError) {
       console.error('Error creating campaign:', campaignError)
       return NextResponse.json(
-        { error: 'Failed to create campaign' },
+        { error: 'Failed to create campaign', details: campaignError.message },
         { status: 500 }
       )
     }

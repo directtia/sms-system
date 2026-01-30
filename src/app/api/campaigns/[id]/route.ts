@@ -12,7 +12,7 @@ export async function GET(
   try {
     const { data: campaign, error } = await getSupabaseAdmin()
       .from('campaigns')
-      .select('*, products(name)')
+      .select('*')
       .eq('id', params.id)
       .single()
 
@@ -24,17 +24,31 @@ export async function GET(
     }
 
     if (error) {
+      console.error('Error fetching campaign:', error)
       return NextResponse.json(
-        { error: 'Failed to fetch campaign' },
+        { error: 'Failed to fetch campaign', details: error.message },
         { status: 500 }
       )
+    }
+
+    // Fetch product name if product_id exists
+    if (campaign.product_id) {
+      const { data: product } = await getSupabaseAdmin()
+        .from('products')
+        .select('id, name')
+        .eq('id', campaign.product_id)
+        .single()
+
+      if (product) {
+        campaign.products = product
+      }
     }
 
     return NextResponse.json({ campaign }, { status: 200 })
   } catch (error) {
     console.error('Error fetching campaign:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     )
   }
