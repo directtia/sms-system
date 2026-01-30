@@ -19,7 +19,24 @@ export default function ProductsPage() {
       const res = await fetch('/api/products')
       if (!res.ok) throw new Error('Failed to fetch products')
       const data = await res.json()
-      setProducts(data.products || [])
+
+      // Fetch templates for each product
+      const productsWithTemplates = await Promise.all(
+        (data.products || []).map(async (product: any) => {
+          try {
+            const templateRes = await fetch(`/api/products/${product.id}/template`)
+            if (templateRes.ok) {
+              const templateData = await templateRes.json()
+              return { ...product, template: templateData.template }
+            }
+          } catch (e) {
+            // Template not found, which is okay
+          }
+          return product
+        })
+      )
+
+      setProducts(productsWithTemplates)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error')
     } finally {
@@ -93,8 +110,7 @@ export default function ProductsPage() {
       ) : (
         <div className="grid gap-4">
           {products.map((product) => {
-            const hasTemplate = product.message_templates && product.message_templates.length > 0
-            const template = hasTemplate ? product.message_templates[0] : null
+            const template = product.template
 
             return (
               <div key={product.id} className="bg-white p-6 rounded-lg shadow">

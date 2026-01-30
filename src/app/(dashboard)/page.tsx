@@ -15,10 +15,28 @@ export default function CampaignsPage() {
   const fetchCampaigns = async () => {
     try {
       setLoading(true)
-      const res = await fetch('/api/campaigns')
-      if (!res.ok) throw new Error('Failed to fetch campaigns')
-      const data = await res.json()
-      setCampaigns(data.campaigns || [])
+
+      // Fetch both campaigns and products in parallel
+      const [campaignsRes, productsRes] = await Promise.all([
+        fetch('/api/campaigns'),
+        fetch('/api/products')
+      ])
+
+      if (!campaignsRes.ok) throw new Error('Failed to fetch campaigns')
+
+      const campaignsData = await campaignsRes.json()
+      const productsData = productsRes.ok ? await productsRes.json() : { products: [] }
+
+      const productMap = new Map(
+        (productsData.products || []).map((p: any) => [p.id, p.name])
+      )
+
+      const campaignsWithProducts = (campaignsData.campaigns || []).map((campaign: any) => ({
+        ...campaign,
+        product_name: productMap.get(campaign.product_id) || 'N/A'
+      }))
+
+      setCampaigns(campaignsWithProducts)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error')
     } finally {
@@ -87,7 +105,7 @@ export default function CampaignsPage() {
                 return (
                   <tr key={campaign.id} className="border-b hover:bg-gray-50">
                     <td className="px-6 py-3 font-medium">{campaign.name}</td>
-                    <td className="px-6 py-3">{campaign.products?.name || 'N/A'}</td>
+                    <td className="px-6 py-3">{campaign.product_name || 'N/A'}</td>
                     <td className="px-6 py-3 text-center">{campaign.total_leads}</td>
                     <td className="px-6 py-3 text-center text-green-600">
                       {campaign.delivered}

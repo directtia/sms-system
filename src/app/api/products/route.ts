@@ -10,8 +10,9 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false })
 
     if (error) {
+      console.error('Supabase error:', error)
       return NextResponse.json(
-        { error: 'Failed to fetch products' },
+        { error: 'Failed to fetch products', details: error.message },
         { status: 500 }
       )
     }
@@ -19,8 +20,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ products }, { status: 200 })
   } catch (error) {
     console.error('Error fetching products:', error)
+    const errorMessage = error instanceof Error ? error.message : String(error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', details: errorMessage },
       { status: 500 }
     )
   }

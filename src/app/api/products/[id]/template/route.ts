@@ -26,8 +26,9 @@ export async function GET(
     }
 
     if (error) {
+      console.error('Error fetching template:', error)
       return NextResponse.json(
-        { error: 'Failed to fetch template' },
+        { error: 'Failed to fetch template', details: error.message },
         { status: 500 }
       )
     }
@@ -86,8 +87,9 @@ export async function PUT(
         .single()
 
       if (error) {
+        console.error('Error updating template:', error)
         return NextResponse.json(
-          { error: 'Failed to update template' },
+          { error: 'Failed to update template', details: error.message },
           { status: 500 }
         )
       }
@@ -108,8 +110,9 @@ export async function PUT(
         .single()
 
       if (error) {
+        console.error('Error creating template:', error)
         return NextResponse.json(
-          { error: 'Failed to create template' },
+          { error: 'Failed to create template', details: error.message },
           { status: 500 }
         )
       }
