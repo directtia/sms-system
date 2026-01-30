@@ -21,20 +21,27 @@ export default function CampaignDetailsPage() {
   const fetchCampaignAndLeads = async () => {
     try {
       setLoading(true)
-      const [campaignRes, leadsRes] = await Promise.all([
-        fetch(`/api/campaigns/${campaignId}`),
-        fetch(`/api/leads?campaignId=${campaignId}`)
-      ])
 
-      if (!campaignRes.ok || !leadsRes.ok) {
-        throw new Error('Failed to fetch data')
+      // Fetch campaign
+      const campaignRes = await fetch(`/api/campaigns/${campaignId}`)
+      if (!campaignRes.ok) {
+        throw new Error('Failed to fetch campaign')
       }
-
       const campaignData = await campaignRes.json()
-      const leadsData = await leadsRes.json()
-
       setCampaign(campaignData.campaign)
-      setLeads(leadsData.leads || [])
+
+      // Fetch leads (optional - don't break if it fails)
+      try {
+        const leadsRes = await fetch(`/api/leads?campaignId=${campaignId}`)
+        if (leadsRes.ok) {
+          const leadsData = await leadsRes.json()
+          setLeads(leadsData.leads || [])
+        }
+      } catch (err) {
+        // Leads failed, but we can still show the campaign
+        console.error('Error fetching leads:', err)
+        setLeads([])
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error')
     } finally {
