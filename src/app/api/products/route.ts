@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   try {
     const { data: products, error } = await getSupabaseAdmin()
       .from('products')
-      .select('*, message_templates(id, message, variables)')
+      .select('*')
       .order('created_at', { ascending: false })
 
     if (error) {
