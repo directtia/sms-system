@@ -27,7 +27,7 @@ export async function PUT(
       )
     }
 
-    const { data: template, error } = await getSupabaseAdmin()
+    const { data: template, error } = await (getSupabaseAdmin() as any)
       .from('templates')
       .update({ name: name.trim(), message: message.trim() })
       .eq('id', params.id)

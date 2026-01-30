@@ -20,7 +20,7 @@ export async function PUT(
       )
     }
 
-    const { data: offer, error } = await getSupabaseAdmin()
+    const { data: offer, error } = await (getSupabaseAdmin() as any)
       .from('offers')
       .update({ name: name.trim() })
       .eq('id', params.id)
