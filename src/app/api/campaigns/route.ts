@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
 
     let query = getSupabaseAdmin()
       .from('campaigns')
-      .select('*, products(name)')
+      .select('*')
       .order('created_at', { ascending: false })
 
     if (productId) {
