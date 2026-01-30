@@ -31,16 +31,45 @@ export async function GET(
       )
     }
 
-    // Fetch product name if product_id exists
-    if (campaign && campaign.product_id) {
-      const { data: product } = await getSupabaseAdmin()
-        .from('products')
-        .select('id, name')
-        .eq('id', campaign.product_id)
-        .single()
+    // Fetch related data (product, offer, template)
+    if (campaign) {
+      // Fetch product
+      if (campaign.product_id) {
+        const { data: product } = await getSupabaseAdmin()
+          .from('products')
+          .select('id, name')
+          .eq('id', campaign.product_id)
+          .single()
 
-      if (product) {
-        campaign.products = product
+        if (product) {
+          campaign.products = product
+        }
+      }
+
+      // Fetch offer
+      if (campaign.offer_id) {
+        const { data: offer } = await getSupabaseAdmin()
+          .from('offers')
+          .select('id, name')
+          .eq('id', campaign.offer_id)
+          .single()
+
+        if (offer) {
+          campaign.offers = offer
+        }
+      }
+
+      // Fetch template
+      if (campaign.template_id) {
+        const { data: template } = await getSupabaseAdmin()
+          .from('templates')
+          .select('id, name, message')
+          .eq('id', campaign.template_id)
+          .single()
+
+        if (template) {
+          campaign.templates = template
+        }
       }
     }
 

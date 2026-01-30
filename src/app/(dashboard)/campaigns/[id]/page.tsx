@@ -132,13 +132,17 @@ export default function CampaignDetailsPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-start">
-        <div>
+        <div className="flex-1">
           <h1 className="text-3xl font-bold">{campaign.name}</h1>
-          <p className="text-gray-600">Produto: {campaign.products?.name}</p>
+          <div className="mt-3 space-y-2 text-gray-600">
+            <p>📦 Produto: <span className="font-medium">{campaign.products?.name || 'N/A'}</span></p>
+            <p>🎁 Oferta: <span className="font-medium">{campaign.offers?.name || 'N/A'}</span></p>
+            <p>💬 Template: <span className="font-medium">{campaign.templates?.name || 'N/A'}</span></p>
+          </div>
         </div>
         <a
           href="/"
-          className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+          className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 whitespace-nowrap ml-4"
         >
           ← Voltar
         </a>
@@ -163,6 +167,16 @@ export default function CampaignDetailsPage() {
           <div className="text-3xl font-bold text-blue-600">{deliveryRate}%</div>
         </div>
       </div>
+
+      {/* Template Message */}
+      {campaign.templates && (
+        <div className="bg-blue-50 border border-blue-200 p-6 rounded-lg">
+          <h2 className="text-xl font-bold text-blue-900 mb-3">📧 Mensagem a Enviar</h2>
+          <div className="bg-white p-4 rounded border border-blue-300">
+            <p className="text-gray-800 whitespace-pre-wrap">{campaign.templates.message}</p>
+          </div>
+        </div>
+      )}
 
       {/* Leads Table */}
       <div className="bg-white rounded-lg shadow">
