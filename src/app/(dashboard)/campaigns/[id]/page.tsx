@@ -142,7 +142,7 @@ export default function CampaignDetailsPage() {
         </div>
         <a
           href="/"
-          className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 whitespace-nowrap ml-4"
+          className="bg-slate-700 text-white px-4 py-2 rounded hover:bg-slate-800 whitespace-nowrap ml-4"
         >
           ← Voltar
         </a>

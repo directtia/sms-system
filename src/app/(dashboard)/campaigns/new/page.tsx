@@ -103,7 +103,7 @@ export default function NewCampaignPage() {
         <h1 className="text-3xl font-bold">Nova Campanha</h1>
         <a
           href="/"
-          className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+          className="bg-slate-700 text-white px-4 py-2 rounded hover:bg-slate-800"
         >
           ← Voltar
         </a>
@@ -206,13 +206,13 @@ export default function NewCampaignPage() {
           <button
             type="submit"
             disabled={creating || !campaignName.trim() || products.length === 0 || offers.length === 0 || templates.length === 0}
-            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+            className="bg-teal-600 text-white px-6 py-2 rounded hover:bg-teal-700 disabled:opacity-50"
           >
             {creating ? 'Criando...' : 'Criar Campanha'}
           </button>
           <a
             href="/"
-            className="bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700"
+            className="bg-slate-700 text-white px-6 py-2 rounded hover:bg-slate-800"
           >
             Cancelar
           </a>

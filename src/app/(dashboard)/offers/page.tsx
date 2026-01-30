@@ -129,7 +129,7 @@ export default function OffersPage() {
           <button
             type="submit"
             disabled={creating || !newOfferName.trim()}
-            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+            className="bg-teal-600 text-white px-6 py-2 rounded hover:bg-teal-700 disabled:opacity-50"
           >
             {creating ? 'Criando...' : 'Criar'}
           </button>
@@ -166,7 +166,7 @@ export default function OffersPage() {
                     </button>
                     <button
                       onClick={() => setEditingId(null)}
-                      className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+                      className="bg-slate-700 text-white px-4 py-2 rounded hover:bg-slate-800"
                     >
                       Cancelar
                     </button>
@@ -179,7 +179,7 @@ export default function OffersPage() {
                 <div className="flex gap-2 ml-4">
                   <button
                     onClick={() => handleStartEdit(offer)}
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700"
                   >
                     Editar
                   </button>

@@ -97,7 +97,7 @@ export default function ProductEditPage() {
         <h1 className="text-3xl font-bold">Editar Template</h1>
         <a
           href="/products"
-          className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+          className="bg-slate-700 text-white px-4 py-2 rounded hover:bg-slate-800"
         >
           ← Voltar
         </a>
@@ -163,13 +163,13 @@ export default function ProductEditPage() {
           <button
             type="submit"
             disabled={saving || !message.trim()}
-            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+            className="bg-teal-600 text-white px-6 py-2 rounded hover:bg-teal-700 disabled:opacity-50"
           >
             {saving ? 'Salvando...' : 'Salvar Template'}
           </button>
           <a
             href="/products"
-            className="bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700"
+            className="bg-slate-700 text-white px-6 py-2 rounded hover:bg-slate-800"
           >
             Cancelar
           </a>
