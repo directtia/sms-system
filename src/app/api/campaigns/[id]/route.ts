@@ -32,7 +32,7 @@ export async function GET(
     }
 
     // Fetch product name if product_id exists
-    if (campaign.product_id) {
+    if (campaign?.product_id) {
       const { data: product } = await getSupabaseAdmin()
         .from('products')
         .select('id, name')
@@ -40,7 +40,7 @@ export async function GET(
         .single()
 
       if (product) {
-        campaign.products = product
+        (campaign as any).products = product
       }
     }
 
