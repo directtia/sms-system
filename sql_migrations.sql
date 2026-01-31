@@ -1,7 +1,7 @@
 -- Criar tabela leads se não existir
 CREATE TABLE IF NOT EXISTS leads (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  campaign_id UUID NOT NULL REFERENCES campaigns(id) ON DELETE CASCADE,
+  campaign_id UUID REFERENCES campaigns(id) ON DELETE CASCADE,
   phone VARCHAR(20) NOT NULL,
   customer_name VARCHAR(255),
   message TEXT,
